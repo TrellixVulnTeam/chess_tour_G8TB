@@ -1,0 +1,39 @@
+.access_mess {
+	position:absolute;
+	margin-top: -90px;
+	text-align:center;
+	width:100%;
+	margin-left: -15px;
+	padding:10px 0;
+}
+.tab-content {
+	overflow: visible;
+}
+body {
+	background: rgba(0,0,0,0.6); 
+	max-width:100%;
+}
+.login-body {
+	background: #fff;
+	padding:15px;
+    box-sizing: initial;
+    position: absolute;
+}
+.container-login .form-group {
+	margin-top: 5px;
+}
+.container-login .form-group input {
+	border-radius:0;
+	width:100%;
+	height:35px;
+	box-sizing: border-box;
+}
+
+.container-login .form-group button {
+	border-radius:0;
+	width:100%;
+}
+#top-bar {
+	margin-bottom: 20px;
+	padding-bottom: 5px;
+}

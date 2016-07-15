@@ -1,0 +1,37 @@
+{% extends "chtor_admin/auth_base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+		SignUp
+{% endblock title %}
+
+{% block auth_form %}
+	<div id="login-access" class="tab-pane fade active in">
+		<ul id="top-bar" class="nav nav-tabs nav-justified">
+			<li class="active">
+				<h3>
+					Sign-Up or <a href="{% url 'chtor_adm:auth' 'login' %}">Log-in</a>
+				</h2>
+			</li>
+		</ul>			
+		<form action="{% url 'chtor_adm:auth' 'signup' %}" method="post" accept-charset="utf-8" autocomplete="off" role="form" class="form-horizontal">
+			{% csrf_token %}
+			<div class="form-group ">
+				<input type="text" class="form-control" name="email" id="login_value" placeholder="Email" tabindex="1" value="" />
+			</div>
+			<div class="form-group ">
+				<input type="text" class="form-control" name="login" id="login_value" placeholder="Login" tabindex="1" value="" />
+			</div>
+			<div class="form-group ">
+				<input type="password" class="form-control" name="password" id="password" placeholder="Password" value="" tabindex="2" />
+			</div>
+			<div class="form-group ">
+				<input type="password" class="form-control" name="c_password" id="c_password" placeholder="Confirm Password" value="" tabindex="2" />
+			</div>
+			<br/>
+			<div class="form-group ">				
+					<button type="submit" id="submit" tabindex="5" class="btn btn-lg btn-primary">Create account</button>
+			</div>
+		</form>			
+	</div>
+{% endblock auth_form %}

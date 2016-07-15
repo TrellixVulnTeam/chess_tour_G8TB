@@ -1,0 +1,177 @@
+{% extends "chtor/base.html" %}
+{% load chtor_extags %}
+
+{% block ext_static %}
+<script>
+$(document).ready(function(){
+	$(window).on("unload",function(){
+		
+	});
+    // Helpful debugging
+    socket.onopen = function () {
+        console.log("Connected to round socket");
+        window.chtor = {
+        		oppUserCheckConn: 1,
+        		users: ['{{current_user}}','{{opponent_user}}'],
+        		oppUserId: {{opponent_user.id}},
+        		curUserId: {{current_user.id}},
+        		white: {{white}},
+        		roundId: {{round.id}},
+        		userJoin: false,
+        		startTimer: 3,
+        		hasNoHistory: false
+        	};
+    		console.log(window.chtor)
+  		    if (typeof socketJoinInterval !== 'undefined')
+  		    	clearInterval(socketJoinInterval);
+  		    if (typeof opponentUserReady !== 'undefined')
+  		    	clearInterval(opponentUserReady);
+    		socketJoinInterval = setInterval(function(){
+				socket.send(JSON.stringify({
+		            "command": "join",
+		            "room": chtor.roundId
+		        }));
+			}, 1000)
+			opponentUserReady = setInterval(function(){
+				if(chtor.userJoin && chtor.hasNoHistory)
+					socket.send(JSON.stringify({
+			                "command": "check",
+			                "room": chtor.roundId,
+			                "op_user": chtor.oppUserId,
+                            "timer": $('.player_info.'+(chtor.white?'w':'b')).find('.timer').attr('timer')
+			            }));
+			}, 500)
+    };
+    socket.onclose = function () {
+        console.log("Disconnected from round socket");
+    }
+    window.onbeforeunload = function(event) {
+	    socket.send(JSON.stringify({
+	        "command": "leave",
+	        "room": chtor.roundId
+	    }));
+	}
+	$('.connect_users button').click(function() {
+		$('.connect_users').hide();
+	})
+});
+</script>
+<style>
+.connect_users {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(51, 51, 51, 0.6);
+    z-index: 5;
+    padding: 10px;
+    top: -10px;
+    box-sizing: content-box;
+}
+
+.connect_users .block {
+    background: #fff;
+    border-radius: 6px;
+    width: 35%;
+    min-width: 200px;
+    max-width: 320px;
+    padding: 20px;
+    text-align: center;
+    margin: 120px auto;
+    border: 2px solid rgba(0,0,0,0.2);
+}
+
+.connect_users .block p {
+    font-size: 24px;
+}
+
+.connect_users .block * {
+    display: block;
+    margin: 4px auto;
+}
+
+.connect_users .block button {
+    margin-top: 13px;
+    width: 60%;
+    border-radius: 4px;
+    background: #337ab7;
+    color: #fff;
+    font-weight: 700;
+    padding: 6px 0;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+.connect_users .block span:before {
+    width: 6px;
+    height: 6px;
+    content: "";
+    background: red;
+    position: absolute;
+    margin: 7px -12px;
+    border-radius: 50%;
+}
+
+.connect_users .block span.active:before {
+    background: green;
+}
+.player_status {
+    width: 6px;
+    height: 6px;
+    float: left;
+    margin: 13px 5px 0 0;
+    background: red;
+    border-radius: 50%;
+}
+
+.player_status.active {
+    background: green;
+}
+.connect_users .block button.disabled {
+    background: grey;
+    cursor: not-allowed;
+}
+</style>
+{% endblock ext_static %}
+
+
+{% if tour %}	
+
+	{% block extra_nav_2 %}
+	    <li class="active new_tor"><a href="{% url 'chtor:tournament' tour.id %}">{{tour}}</a></li>
+	{% endblock extra_nav_2 %}
+
+	{% block bodier_title %}
+		<p class="bg-info round_title"{% if bg_color %} style="background:{{bg_color}}"{%endif%}>{{current_user}} <small>({{current_user.chess_board.elo}})</small><span>VS</span>{{opponent_user}} <small>({{opponent_user.chess_board.elo}})</small></p>
+	{% endblock bodier_title %}
+	{% block bodier %}
+		<div class="connect_users">
+			<div class="block">
+				<p> Waiting for {{opponent_user}}</p>
+				<span>Connecting...</span>
+				<button class="disabled">Start at: 3</button>
+			</div>
+		</div>
+		<div class="col-xs-12 col-md-7 game_board">
+			<div class="board_capture_trash cap_u_1 {%if white == "true"%}w{%else%}b{%endif%}" cap_string=""></div>
+			<div id="chboard"></div>
+			<div class="board_capture_trash cap_u_2 {%if white != "true"%}w{%else%}b{%endif%}" cap_string=""></div>
+		</div>	
+		<div class="col-xs-12 col-md-5 active_users">
+			<div class="player_info pinfo_u_2 {%if white != "true"%}w{%else%}b{%endif%}" userId="{{opponent_user.id}}">
+				<div class="chess_color chcol_u_2"></div>
+				<div class="timer t_u_2" timer="90000">00:00</div>
+				<div class="info"><div class="player_status"></div>{{opponent_user}}<small>ELO: <span>{{opponent_user.chess_board.elo}}</span></small></div>
+			</div>
+			<div class="history_chat">
+				<div class="chtor_step" context="">
+					<span class="num">1</span><span class="white"><ul><li>...</li><li></li></ul></span><span class="black"><ul><li>&nbsp;</li><li></li></ul></span>
+				</div>
+			</div>
+			<div class="player_info pinfo_u_1 {%if white == "true"%}w{%else%}b{%endif%}" userId="{{current_user.id}}">
+				<div class="chess_color chcol_u_1"></div>
+				<div class="timer t_u_1" timer="90000">00:00</div>
+				<div class="info"><div class="player_status active"></div>{{current_user}}<small>ELO: <span>{{current_user.chess_board.elo}}</span></small></div>
+			</div>
+		</div>
+	{% endblock bodier %}
+
+{%endif%}

@@ -1,0 +1,32 @@
+{% extends "chtor/base.html" %}
+
+{% block ext_static %}
+<script>
+function get_up(param){
+	$.get("{% url 'chtor:who_online' %}?"+param+"=1", function( data ) {
+		console.log( data );
+		if(!data.is_updated) {
+			// SHOW ERROR MESSAGE
+		}
+	}, "json" );
+}
+setInterval(function(){
+	get_up('update')
+}, 180000)
+</script>
+{% endblock ext_static %}
+
+{% block extra_nav_1 %}
+    <li class="active new_tor"><a href="#">Create Tournament</a></li>
+{% endblock extra_nav_1 %}
+
+{% block bodier %}
+	<div class="col-xs-12" onclick="get_up('get_list')">
+		<div class="create_tournament">
+		asd
+		</div>
+		<div class="active_users">
+
+		</div>
+	</div>
+{% endblock bodier %}

@@ -1,0 +1,51 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	{% block meta %}{% endblock meta %}
+
+	<title>
+		{% block title %}
+			Main
+		{% endblock title %}
+		 - Chess Tournament
+	</title>
+
+	{% block static %}
+		<link rel="stylesheet" href="{% static 'css/site.css' %}">
+		<link rel="stylesheet" href="{% static 'css/admin/bootstrap.css' %}">
+
+		<script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
+		<link rel="stylesheet" href="{% static 'css/admin/login.css' %}">
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('.login-body').css('top',(window.innerWidth - $(this).height())/2.5).animate({'opacity':1},300);
+			})
+		</script>
+	{% endblock static %}
+
+	{% block ext_static %}{% endblock ext_static %}
+
+</head>
+<body>
+<div class="login-body" style="width:240px;left:45%;opacity:0;">
+		<article class="container-login center-block">
+			<section>
+				<div class="tab-content tabs-login col-lg-12 col-md-12 col-sm-12 cols-xs-12">
+					{% if messages %}
+						<script>setTimeout(function(){$('.access_mess').animate({'opacity':0},200)},5000)</script>
+						{% for message in messages %}
+							<p class="access_mess bg-{{message.tags }}">{{ message }}</p>
+						{% endfor %}
+					{% endif %}
+
+					{% block auth_form %}
+
+					{% endblock auth_form %}
+				</div>
+			</section>
+		</article>
+	</div>
+</body>
+</html>

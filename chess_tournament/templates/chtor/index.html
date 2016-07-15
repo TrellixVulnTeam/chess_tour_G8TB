@@ -1,0 +1,27 @@
+{% extends "chtor/base.html" %}
+{% load chtor_extags %}
+
+{% block ext_static %}
+<script>
+$(document).ready(function(){
+	
+
+})
+</script>
+{% endblock ext_static %}
+{% block bodier %}
+<div class="col-sm-12 col-sm-push-12 col-md-push-0 col-md-8">
+		<div  class="tor_tabs_bl active">
+
+			{% if tournaments %}
+				{% for tour in tournaments %}
+					<a href="{% url 'chtor:tournament' tour.id %}">{{tour}}</a>
+				{% endfor%}
+			{%endif%}
+		</div>
+
+</div>
+<div class="col-sm-12 col-sm-pull-12 col-md-pull-0 col-md-4">
+	BEST PLAYERS
+</div>
+{% endblock bodier %}

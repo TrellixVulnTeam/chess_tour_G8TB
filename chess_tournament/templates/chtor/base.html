@@ -1,0 +1,88 @@
+{% load staticfiles %}
+{% load chtor_extags %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	{% block meta %}{% endblock meta %}
+
+	<title>
+		{% block title %}
+			Main
+		{% endblock title %}
+		 - Chess Tournament
+	</title>
+
+	{% block sm_js %}
+
+	{% endblock sm_js %}
+
+
+	{% block static %}
+		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/chessboard-0.3.0.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/site.css' %}">
+
+		<script src="{% static 'js/jquery-1.12.2.min.js' %}"></script>
+		<script src="{% static 'js/reconnecting-websocket.min.js' %}"></script>
+		<script src="{% static 'js/chessboard-0.3.0.min.js' %}"></script>
+		<script src="{% static 'js/chess.min.js' %}"></script>
+		<script src="{% static 'js/js.cookie.js' %}"></script>
+		<script src="{% static 'js/site.js' %}"></script>
+	{% endblock static %}
+
+	{% block ext_static %}{% endblock ext_static %}
+
+</head>
+<body>
+	<div class="row">
+		<div class="col-sm-10 col-md-6">
+			<h3 class="site_title">Chess Tournament</h3>
+		</div>
+		<div class="col-sm-2 col-md-6">
+			<div class="site_panel">
+				{% if not request.user.is_authenticated %}
+					<a href="{% url 'chtor_adm:auth' 'signup' %}" class="btn btn-warning pull-right">Sign Up</a>
+					<div class="pull-right padding_block"></div>
+					<a href="{% url 'chtor_adm:auth' 'login' %}" class="btn btn-primary pull-right">Log in</a>
+				{% else %}
+					<a href="{% url 'chtor_adm:auth' 'logout' %}" class="btn btn-primary pull-right">Log Out</a>
+					<div class="pull-right padding_block"></div>
+					{% if 'admin' in group or 'judje' in group %}
+						<a href="{% url 'chtor:new_tor' %}" class="btn btn-warning pull-right">Create Tournament</a>
+						<div class="pull-right padding_block"></div>
+					{% endif %}
+					<h5 class="pull-right" onclick="_leave()">Welcome, <strong>{{request.user}}</strong></h5>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="main_block">
+		<div class="site_nav_block">
+			<ul>
+				{% block extra_nav_1 %}{% endblock extra_nav_1 %}
+         		<li{% if bt_active == "tour" %} class="active"{% endif %}><a href="#">Tournament</a></li>
+				<li{% if bt_active == "onl" %} class="active"{% endif %}><a href="#">Online</a></li>
+				{% block extra_nav_2 %}{% endblock extra_nav_2 %}
+         	</ul>
+		</div>
+		{% block bodier_title %}{% endblock bodier_title %}
+		<div class="row" style="padding:10px;">
+			{% block bodier %}
+			{% endblock bodier %}
+		</div>
+		<div class="footer row">
+			<div class="col-md-6">
+				© ChessTournament by Lebed Sergey
+			</div>
+			<div class="col-md-6">
+				<ul class="list-inline">
+				  <li><a href="#">Tournament</a></li>
+				  <li><a href="#">Online</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</html>
