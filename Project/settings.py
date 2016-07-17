@@ -60,7 +60,6 @@ CHANNEL_LAYERS = {
     "default": {
         # This example app uses the Redis channel layer implementation asgi_redis
         "BACKEND": "asgi_redis.RedisChannelLayer",
-
         "ROUTING": "Project.routing.channel_routing",
     },
 }
