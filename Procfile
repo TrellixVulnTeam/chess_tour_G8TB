@@ -1,2 +1,2 @@
-web: gunicorn Project.wsgi --log-file -
+web: gunicorn Project.wsgi
 web: python manage.py runserver 0.0.0.0:5000
