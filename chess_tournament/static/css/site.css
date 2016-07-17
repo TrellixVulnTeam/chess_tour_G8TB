@@ -22,7 +22,9 @@ div {
 	background:#fff;
 	border:1px solid rgba(0,0,0,0.15);
 	border-radius: 6px;
-	overflow:hidden;	
+	overflow:hidden;
+    min-height: 400px;
+    padding-bottom: 45.5px;
 }
 .site_nav_block {
 	border-bottom: 1px solid #ccc;
@@ -111,6 +113,9 @@ div {
     padding: 6px 20px 0;
     color: #fff;
     margin: 10px 0 0;
+        bottom: 0;
+    position: absolute;
+    width: 100%;
 }
 .player_info {
     height: 50px;

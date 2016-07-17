@@ -28,7 +28,9 @@
 		<script src="{% static 'js/chessboard-0.3.0.min.js' %}"></script>
 		<script src="{% static 'js/chess.min.js' %}"></script>
 		<script src="{% static 'js/js.cookie.js' %}"></script>
-		<script src="{% static 'js/site.js' %}"></script>
+		{% if "tournament" in request.path %}
+			<script src="{% static 'js/site.js' %}"></script>
+		{% endif %}
 	{% endblock static %}
 
 	{% block ext_static %}{% endblock ext_static %}
@@ -63,8 +65,7 @@
 		<div class="site_nav_block">
 			<ul>
 				{% block extra_nav_1 %}{% endblock extra_nav_1 %}
-         		<li{% if bt_active == "tour" %} class="active"{% endif %}><a href="#">Tournament</a></li>
-				<li{% if bt_active == "onl" %} class="active"{% endif %}><a href="#">Online</a></li>
+         		<li{% if bt_active == "tour" %} class="active"{% endif %}><a href="/">Tournaments</a></li>
 				{% block extra_nav_2 %}{% endblock extra_nav_2 %}
          	</ul>
 		</div>
@@ -79,8 +80,7 @@
 			</div>
 			<div class="col-md-6">
 				<ul class="list-inline">
-				  <li><a href="#">Tournament</a></li>
-				  <li><a href="#">Online</a></li>
+				  <li><a href="/">Tournaments</a></li>
 				</ul>
 			</div>
 		</div>
